@@ -7,8 +7,6 @@ import { Switch, Route, Redirect } from 'react-router-dom'
 
 import store, { history } from '../redux'
 import Home from '../components/home'
-import Profile from '../components/profile'
-import Main from '../components/main'
 import DummyView from '../components/dummy-view'
 import NotFound from '../components/404'
 
@@ -70,10 +68,9 @@ export default (props) => {
       <ConnectedRouter history={history} location={props.location} context={props.context}>
         <Startup>
           <Switch>
-            <Route exact path="/" component={() => <DummyView />} />
-            <Route exact path="/dashboard" component={() => <Home />} />
-            <Route exact path="/dashboard/main" component={() => <Main />} />
-            <Route exact path="/dashboard/profile/:username" component={() => <Profile />} />
+            <Route exact path="/*" component={() => <Home />} />
+            {/* <Route exact path="/:username" component={() => <Home />} />
+            <Route exact path="/:username/:projectinfo" component={() => <Home />} /> */}
             <PrivateRoute exact path="/hidden-route" component={() => <DummyView />} />
             <Route component={() => <NotFound />} />
           </Switch>

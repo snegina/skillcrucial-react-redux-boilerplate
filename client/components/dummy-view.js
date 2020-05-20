@@ -1,6 +1,6 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
-import Header from './headers'
+import Header from './header'
 
 const Dummy = () => {
   return (

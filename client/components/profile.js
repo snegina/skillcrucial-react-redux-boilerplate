@@ -1,8 +1,6 @@
 import React from 'react'
-import { connect } from 'react-redux'
-import { bindActionCreators } from 'redux'
 import { Link, useParams } from 'react-router-dom'
-import Header from './headers'
+import Header from './header'
 
 const Profile = () => {
   const { username } = useParams()
@@ -22,8 +20,4 @@ const Profile = () => {
 }
 Profile.propTypes = {}
 
-const mapStateToProps = () => ({})
-
-const mapDispatchToProps = (dispatch) => bindActionCreators({}, dispatch)
-
-export default connect(mapStateToProps, mapDispatchToProps)(Profile)
+export default Profile
