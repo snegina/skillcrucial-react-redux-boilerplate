@@ -1,33 +1,32 @@
-/* eslint-disable import/no-duplicates */
 import express from 'express'
 import path from 'path'
 import axios from 'axios'
 import cors from 'cors'
 import bodyParser from 'body-parser'
 import sockjs from 'sockjs'
+import { renderToStaticNodeStream } from 'react-dom/server'
+import React from 'react'
+
 import cookieParser from 'cookie-parser'
+import Root from '../client/config/root'
+
 import Html from '../client/html'
 
 let connections = []
 
-const port = process.env.PORT || 8080
+const port = process.env.PORT || 8090
 const server = express()
 const { readFile, writeFile, unlink } = require('fs').promises
 
-server.use(cors())
+const middleware = [
+  cors(),
+  express.static(path.resolve(__dirname, '../dist/assets')),
+  bodyParser.urlencoded({ limit: '50mb', extended: true, parameterLimit: 50000 }),
+  bodyParser.json({ limit: '50mb', extended: true }),
+  cookieParser()
+]
 
-const setHeaders = (req, res, next) => {
-  res.set('x-skillcrucial-user', '8cea9b3b-6342-4330-bb7b-f85683547fa6')
-  res.set('Access-Control-Expose-Headers', 'X-SKILLCRUCIAL-USER')
-  next()
-}
-server.use(setHeaders)
-
-server.use(express.static(path.resolve(__dirname, '../dist/assets')))
-server.use(bodyParser.urlencoded({ limit: '50mb', extended: true, parameterLimit: 50000 }))
-server.use(bodyParser.json({ limit: '50mb', extended: true }))
-
-server.use(cookieParser())
+middleware.forEach((it) => server.use(it))
 
 const saveFile = async (users) => {
   const result = await writeFile(`${__dirname}/test.json`, JSON.stringify(users, 1, 2), {
@@ -97,14 +96,13 @@ echo.on('connection', (conn) => {
 })
 
 server.get('/', (req, res) => {
-  // const body = renderToString(<Root />);
-  const title = 'Server side Rendering'
-  res.send(
-    Html({
-      body: '',
-      title
-    })
-  )
+  const appStream = renderToStaticNodeStream(<Root location={req.url} context={{}} />)
+  res.write(htmlStart)
+  appStream.pipe(res, { end: false })
+  appStream.on('end', () => {
+    res.write(htmlEnd)
+    res.end()
+  })
 })
 
 server.get('/*', (req, res) => {
