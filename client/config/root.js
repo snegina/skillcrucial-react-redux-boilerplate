@@ -1,10 +1,9 @@
 /* eslint-disable react/jsx-props-no-spreading */
 import React from 'react'
 import PropTypes from 'prop-types'
-import { Provider, connect } from 'react-redux'
+import { Provider } from 'react-redux'
 import { ConnectedRouter } from 'connected-react-router'
-import { Switch, Route, withRouter, Redirect } from 'react-router-dom'
-import { bindActionCreators } from 'redux'
+import { Switch, Route, Redirect } from 'react-router-dom'
 
 import store, { history } from '../redux'
 import Home from '../components/home'
@@ -65,32 +64,20 @@ PrivateRoute.propTypes = types
 PrivateRoute.defaultProps = defaults
 OnlyAnonymousRoute.defaultProps = defaults
 
-const mapStateToProps = (state) => ({
-  user: state.authentication.user,
-  token: state.authentication.token
-})
-
-const mapDispatchToProps = (dispatch) => bindActionCreators({}, dispatch)
-
-const PrivateRouteConnected = connect(mapStateToProps, mapDispatchToProps)(PrivateRoute)
-
-const mapDispatchToPropsStartup = (dispatch) => bindActionCreators({}, dispatch)
-
-const StartupConnected = withRouter(connect(() => ({}), mapDispatchToPropsStartup)(Startup))
 export default (props) => {
   return (
     <Provider store={store}>
       <ConnectedRouter history={history} location={props.location} context={props.context}>
-        <StartupConnected>
+        <Startup>
           <Switch>
             <Route exact path="/" component={() => <DummyView />} />
             <Route exact path="/dashboard" component={() => <Home />} />
             <Route exact path="/dashboard/main" component={() => <Main />} />
             <Route exact path="/dashboard/profile/:username" component={() => <Profile />} />
-            <PrivateRouteConnected exact path="/hidden-route" component={() => <DummyView />} />
+            <PrivateRoute exact path="/hidden-route" component={() => <DummyView />} />
             <Route component={() => <NotFound />} />
           </Switch>
-        </StartupConnected>
+        </Startup>
       </ConnectedRouter>
     </Provider>
   )
