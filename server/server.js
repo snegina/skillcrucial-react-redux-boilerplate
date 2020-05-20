@@ -4,11 +4,11 @@ import axios from 'axios'
 import cors from 'cors'
 import bodyParser from 'body-parser'
 import sockjs from 'sockjs'
-import { renderToStaticNodeStream } from 'react-dom/server'
-import React from 'react'
+// import { renderToStaticNodeStream } from 'react-dom/server'
+// import React from 'react'
 
 import cookieParser from 'cookie-parser'
-import Root from '../client/config/root'
+// import Root from '../client/config/root'
 
 import Html from '../client/html'
 
@@ -95,15 +95,15 @@ echo.on('connection', (conn) => {
   })
 })
 
-server.get('/', (req, res) => {
-  const appStream = renderToStaticNodeStream(<Root location={req.url} context={{}} />)
-  res.write(htmlStart)
-  appStream.pipe(res, { end: false })
-  appStream.on('end', () => {
-    res.write(htmlEnd)
-    res.end()
-  })
-})
+// server.get('/', (req, res) => {
+//   const appStream = renderToStaticNodeStream(<Root location={req.url} context={{}} />)
+//   res.write(htmlStart)
+//   appStream.pipe(res, { end: false })
+//   appStream.on('end', () => {
+//     res.write(htmlEnd)
+//     res.end()
+//   })
+// })
 
 server.get('/*', (req, res) => {
   const initialState = {
