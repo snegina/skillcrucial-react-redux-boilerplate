@@ -20,8 +20,10 @@ const Home = () => {
 
   useEffect(() => {
     if (typeof project !== 'undefined') {
-      axios.get(`https://raw.githubusercontent.com/${username}/${project}/master/README.md`).then((data) => {
-          setProjectDescription(data)
+      axios
+        .get(`https://raw.githubusercontent.com/${username}/${project}/master/README.md`)
+        .then((obj) => {
+          setProjectDescription(obj.data)
         })
     }
   }, [username, project])
