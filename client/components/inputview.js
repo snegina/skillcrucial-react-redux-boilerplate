@@ -11,6 +11,7 @@ const InputView = () => {
       <div className="flex items-center justify-center h-screen">
         <div className="bg-red-800 text-white font-bold rounded-lg border shadow-lg p-5">
           <input
+            id="input-field"
             className="text-black"
             type="text"
             value={username}
@@ -19,6 +20,7 @@ const InputView = () => {
             }}
           />
           <button
+            id="search-button"
             type="button"
             className="text-white"
             onClick={() => {

@@ -6,7 +6,7 @@ import InputView from './inputview'
 import ProjectInfo from './projectinfo'
 
 const Home = () => {
-  const { username, project } = useParams()
+  const { username, projectinfo } = useParams()
   const [reposytorieslist, setReposytoriesList] = useState([])
   const [projectDescription, setProjectDescription] = useState('')
 
@@ -19,34 +19,30 @@ const Home = () => {
   }, [username])
 
   useEffect(() => {
-    if (typeof project !== 'undefined') {
+    if (typeof projectinfo !== 'undefined') {
       axios
-        .get(`https://raw.githubusercontent.com/${username}/${project}/master/README.md`)
-        .then((obj) => {
-          setProjectDescription(obj.data)
+        .get(`https://raw.githubusercontent.com/${username}/${projectinfo}/master/README.md`)
+        .then(({ data }) => {
+          setProjectDescription(data)
         })
     }
-  }, [username, project])
+  }, [username, projectinfo])
 
   return (
     <div>
-      <div>
-        <div>
-          <Route exact path="/" render={() => <InputView />} />
-          <Route
-            exact
-            path="/:username"
-            component={() => (
-              <RepositoriesList username={username} reposytorieslist={reposytorieslist} />
-            )}
-          />
-          <Route
-            exact
-            path="/:username/:projectinfo"
-            component={() => <ProjectInfo readme={projectDescription} />}
-          />
-        </div>
-      </div>
+      <Route exact path="/" component={() => <InputView />} />
+      <Route
+        exact
+        path="/:username"
+        component={() => (
+          <RepositoriesList username={username} reposytorieslist={reposytorieslist} />
+        )}
+      />
+      <Route
+        exact
+        path="/:username/:projectinfo"
+        component={() => <ProjectInfo description={projectDescription} />}
+      />
     </div>
   )
 }

@@ -1,12 +1,17 @@
 import React from 'react'
 import Header from './header'
 
+const ReactMarkdown = require('react-markdown')
+
 const ProjectInfo = (props) => {
   return (
     <div>
-      <Header />
-      <div>здесь должен быть файл readme.md</div>
-      <div>{props.readme}</div>
+      <Header id="go-repository-list"/>
+      <div>README</div>
+      <div>----------</div>
+      <div id="description">
+        <ReactMarkdown source={props.description} />
+      </div>
     </div>
   )
 }
